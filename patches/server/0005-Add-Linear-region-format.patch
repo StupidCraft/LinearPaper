@@ -5,7 +5,7 @@ Subject: [PATCH] Add Linear region format
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 3e9d60201f7878f7da39edf8084f247b838d7067..9e80ec518569cdcf77c6991f85237d8bd080d505 100644
+index 51b933a204491c57dcecab58d4d2807f10ec33dc..42347c4b732784493993479b2c3d36558d0b59bf 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -30,6 +30,10 @@ dependencies {
@@ -17,7 +17,7 @@ index 3e9d60201f7878f7da39edf8084f247b838d7067..9e80ec518569cdcf77c6991f85237d8b
 +    implementation("org.lz4:lz4-java:1.8.0")
 +    // LinearPaper end
      implementation("org.apache.logging.log4j:log4j-iostreams:2.22.1") // Paper - remove exclusion
-     implementation("org.ow2.asm:asm-commons:9.7")
+     implementation("org.ow2.asm:asm-commons:9.7.1")
      implementation("org.spongepowered:configurate-yaml:4.2.0-SNAPSHOT") // Paper - config files
 diff --git a/src/main/java/com/triassic/linearpaper/region/AbstractRegionFileFactory.java b/src/main/java/com/triassic/linearpaper/region/AbstractRegionFileFactory.java
 index c010b45b2aefeb1394a27b11b787ff58eecc432d..f32226dd652f6129b4d0d2b262da3555e9be34a9 100644
