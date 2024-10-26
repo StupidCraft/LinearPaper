@@ -4,6 +4,46 @@ Date: Wed, 19 Jun 2024 19:05:44 +0300
 Subject: [PATCH] Abstract regionfile
 
 
+diff --git a/src/main/java/ca/spottedleaf/moonrise/patches/chunk_system/io/ChunkSystemRegionFileStorage.java b/src/main/java/ca/spottedleaf/moonrise/patches/chunk_system/io/ChunkSystemRegionFileStorage.java
+index a814512fcfb85312474ae2c2c21443843bf57831..1fe2cb64309c47c766166f4a7a9773501faac793 100644
+--- a/src/main/java/ca/spottedleaf/moonrise/patches/chunk_system/io/ChunkSystemRegionFileStorage.java
++++ b/src/main/java/ca/spottedleaf/moonrise/patches/chunk_system/io/ChunkSystemRegionFileStorage.java
+@@ -8,9 +8,9 @@ public interface ChunkSystemRegionFileStorage {
+ 
+     public boolean moonrise$doesRegionFileNotExistNoIO(final int chunkX, final int chunkZ);
+ 
+-    public RegionFile moonrise$getRegionFileIfLoaded(final int chunkX, final int chunkZ);
++    public com.triassic.linearpaper.region.AbstractRegionFile moonrise$getRegionFileIfLoaded(final int chunkX, final int chunkZ); // LinearPaper
+ 
+-    public RegionFile moonrise$getRegionFileIfExists(final int chunkX, final int chunkZ) throws IOException;
++    public com.triassic.linearpaper.region.AbstractRegionFile moonrise$getRegionFileIfExists(final int chunkX, final int chunkZ) throws IOException; // LinearPaper
+ 
+     public MoonriseRegionFileIO.RegionDataController.WriteData moonrise$startWrite(
+             final int chunkX, final int chunkZ, final CompoundTag compound
+diff --git a/src/main/java/ca/spottedleaf/moonrise/patches/chunk_system/io/MoonriseRegionFileIO.java b/src/main/java/ca/spottedleaf/moonrise/patches/chunk_system/io/MoonriseRegionFileIO.java
+index 99f6f3e58b11b8967e6f1c3391c190d9a860ab7f..78392574dcab28b029d9fd0cf6907c6b318c4be6 100644
+--- a/src/main/java/ca/spottedleaf/moonrise/patches/chunk_system/io/MoonriseRegionFileIO.java
++++ b/src/main/java/ca/spottedleaf/moonrise/patches/chunk_system/io/MoonriseRegionFileIO.java
+@@ -1469,7 +1469,7 @@ public final class MoonriseRegionFileIO {
+ 
+         public static interface IORunnable {
+ 
+-            public void run(final RegionFile regionFile) throws IOException;
++            public void run(final com.triassic.linearpaper.region.AbstractRegionFile regionFile) throws IOException; // LinearPaper
+ 
+         }
+     }
+diff --git a/src/main/java/ca/spottedleaf/moonrise/patches/chunk_system/storage/ChunkSystemChunkBuffer.java b/src/main/java/ca/spottedleaf/moonrise/patches/chunk_system/storage/ChunkSystemChunkBuffer.java
+index 51c126735ace8fdde89ad97b5cab62f244212db0..7cd7e9293bb1e7596b5a2ebeb410eac2fc2eef98 100644
+--- a/src/main/java/ca/spottedleaf/moonrise/patches/chunk_system/storage/ChunkSystemChunkBuffer.java
++++ b/src/main/java/ca/spottedleaf/moonrise/patches/chunk_system/storage/ChunkSystemChunkBuffer.java
+@@ -8,5 +8,5 @@ public interface ChunkSystemChunkBuffer {
+ 
+     public void moonrise$setWriteOnClose(final boolean value);
+ 
+-    public void moonrise$write(final RegionFile regionFile) throws IOException;
++    public void moonrise$write(final com.triassic.linearpaper.region.AbstractRegionFile regionFile) throws IOException; // LinearPaper
+ }
 diff --git a/src/main/java/com/triassic/linearpaper/region/AbstractRegionFile.java b/src/main/java/com/triassic/linearpaper/region/AbstractRegionFile.java
 new file mode 100644
 index 0000000000000000000000000000000000000000..854397f73a02fbfd6668e0dc9d577cd4ee1765cb
@@ -118,7 +158,7 @@ index e9e1ab1a5be996bc648a53dc4d4123a6b966c437..0226dfda6bdcd80c8f52ad820e1881be
          try (DataInputStream out = new DataInputStream(new java.io.BufferedInputStream(new InflaterInputStream(Files.newInputStream(file))))) {
              return NbtIo.read((java.io.DataInput) out);
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
-index 2d5c1b91b814316bf9f2f22bcd30adacc8970b01..dd39ab538a2b1b5998bbfb830df26316b2a718c8 100644
+index 2d5c1b91b814316bf9f2f22bcd30adacc8970b01..a01cd8a146691033f92878ff9a7dd33378cc07cf 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
 @@ -21,7 +21,7 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
@@ -158,6 +198,48 @@ index 2d5c1b91b814316bf9f2f22bcd30adacc8970b01..dd39ab538a2b1b5998bbfb830df26316
  
          this.regionCache.putAndMoveToFirst(key, ret);
  
+@@ -117,7 +117,7 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
+         }
+ 
+         final ChunkPos pos = new ChunkPos(chunkX, chunkZ);
+-        final RegionFile regionFile = this.getRegionFile(pos);
++        final com.triassic.linearpaper.region.AbstractRegionFile regionFile = this.getRegionFile(pos); // LinearPaper
+ 
+         // note: not required to keep regionfile loaded after this call, as the write param takes a regionfile as input
+         // (and, the regionfile parameter is unused for writing until the write call)
+@@ -138,7 +138,7 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
+     ) throws IOException {
+         final ChunkPos pos = new ChunkPos(chunkX, chunkZ);
+         if (writeData.result() == ca.spottedleaf.moonrise.patches.chunk_system.io.MoonriseRegionFileIO.RegionDataController.WriteData.WriteResult.DELETE) {
+-            final RegionFile regionFile = this.moonrise$getRegionFileIfExists(chunkX, chunkZ);
++            final com.triassic.linearpaper.region.AbstractRegionFile regionFile = this.moonrise$getRegionFileIfExists(chunkX, chunkZ); // LinearPaper
+             if (regionFile != null) {
+                 regionFile.clear(pos);
+             } // else: didn't exist
+@@ -153,7 +153,7 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
+     public final ca.spottedleaf.moonrise.patches.chunk_system.io.MoonriseRegionFileIO.RegionDataController.ReadData moonrise$readData(
+         final int chunkX, final int chunkZ
+     ) throws IOException {
+-        final RegionFile regionFile = this.moonrise$getRegionFileIfExists(chunkX, chunkZ);
++        final com.triassic.linearpaper.region.AbstractRegionFile regionFile = this.moonrise$getRegionFileIfExists(chunkX, chunkZ); // LinearPaper
+ 
+         final DataInputStream input = regionFile == null ? null : regionFile.getChunkDataInputStream(new ChunkPos(chunkX, chunkZ));
+ 
+@@ -204,12 +204,12 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
+     }
+ 
+     // Paper start - rewrite chunk system
+-    public RegionFile getRegionFile(ChunkPos chunkcoordintpair) throws IOException {
++    public com.triassic.linearpaper.region.AbstractRegionFile getRegionFile(ChunkPos chunkcoordintpair) throws IOException { // LinearPaper
+         return this.getRegionFile(chunkcoordintpair, false);
+     }
+     // Paper end - rewrite chunk system
+ 
+-    public RegionFile getRegionFile(ChunkPos chunkcoordintpair, boolean existingOnly) throws IOException { // CraftBukkit // Paper - public
++    public com.triassic.linearpaper.region.AbstractRegionFile getRegionFile(ChunkPos chunkcoordintpair, boolean existingOnly) throws IOException { // CraftBukkit // Paper - public
+         // Paper start - rewrite chunk system
+         if (existingOnly) {
+             return this.moonrise$getRegionFileIfExists(chunkcoordintpair.x, chunkcoordintpair.z);
 @@ -217,7 +217,7 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
          synchronized (this) {
              final long key = ChunkPos.asLong(chunkcoordintpair.x >> REGION_SHIFT, chunkcoordintpair.z >> REGION_SHIFT);
