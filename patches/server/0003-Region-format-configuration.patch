@@ -88,10 +88,10 @@ index 0000000000000000000000000000000000000000..1285e3c410c9f6b5ed8c3ac11da60d1e
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 696d075ca2883f3c37e35f983c4d020e5db89d16..f75e1e6e3d68e4156fd9723aa96dba4e890b07cb 100644
+index 79f3dc4f53dce892c4756b0850352e0ca2eb95a6..90618bb54dadaf9e77ac86c5b0bd321131a077fc 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -980,10 +980,10 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -993,10 +993,10 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
              while (iterator1.hasNext()) {
                  ServerLevel worldserver2 = (ServerLevel) iterator1.next();
  

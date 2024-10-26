@@ -5,7 +5,7 @@ Subject: [PATCH] Add Linear region format
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 51b933a204491c57dcecab58d4d2807f10ec33dc..42347c4b732784493993479b2c3d36558d0b59bf 100644
+index 2bb6508b73755693c812c5d6572ce5dc0cea8592..cfc6a7bc0633bebf0570c1cfacdeaa073372258f 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -30,6 +30,10 @@ dependencies {
@@ -402,10 +402,10 @@ index 0000000000000000000000000000000000000000..f7c5b51f5ab7c3ca5cd31e62bbc599ab
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/util/worldupdate/WorldUpgrader.java b/src/main/java/net/minecraft/util/worldupdate/WorldUpgrader.java
-index efcd9739337624cbea00d8f134916547d2b5a231..850403308847abb5d3a325133520629ebce6f0ba 100644
+index 9701e6b69b99b3ec392810f4a7000adb97f1132c..4be8c6d5b066540bbc735fa2dc476b65896fa5d3 100644
 --- a/src/main/java/net/minecraft/util/worldupdate/WorldUpgrader.java
 +++ b/src/main/java/net/minecraft/util/worldupdate/WorldUpgrader.java
-@@ -76,7 +76,7 @@ public class WorldUpgrader {
+@@ -75,7 +75,7 @@ public class WorldUpgrader implements AutoCloseable {
      volatile int skipped;
      final Reference2FloatMap<ResourceKey<Level>> progressMap = Reference2FloatMaps.synchronize(new Reference2FloatOpenHashMap());
      volatile Component status = Component.translatable("optimizeWorld.stage.counting");
@@ -414,7 +414,7 @@ index efcd9739337624cbea00d8f134916547d2b5a231..850403308847abb5d3a325133520629e
      final DimensionDataStorage overworldDataStorage;
  
      public WorldUpgrader(LevelStorageSource.LevelStorageAccess session, DataFixer dataFixer, RegistryAccess dynamicRegistryManager, boolean eraseCache, boolean recreateRegionFiles) {
-@@ -400,7 +400,7 @@ public class WorldUpgrader {
+@@ -399,7 +399,7 @@ public class WorldUpgrader implements AutoCloseable {
  
          private static List<WorldUpgrader.FileToUpgrade> getAllChunkPositions(RegionStorageInfo key, Path regionDirectory) {
              File[] afile = regionDirectory.toFile().listFiles((file, s) -> {
@@ -424,22 +424,10 @@ index efcd9739337624cbea00d8f134916547d2b5a231..850403308847abb5d3a325133520629e
  
              if (afile == null) {
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
-index f533d13efe1458aa421b51abb6f8604ba71c48c8..8090df00723d54d36033f8f245f87c7c94ee81ac 100644
+index dd39ab538a2b1b5998bbfb830df26316b2a718c8..634bfab92ae2e65d60ef6381d7c4eb507215fdd4 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
-@@ -30,7 +30,10 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
-     private static final int REGION_SHIFT = 5;
-     private static final int MAX_NON_EXISTING_CACHE = 1024 * 64;
-     private final it.unimi.dsi.fastutil.longs.LongLinkedOpenHashSet nonExistingRegionFiles = new it.unimi.dsi.fastutil.longs.LongLinkedOpenHashSet(MAX_NON_EXISTING_CACHE+1);
--    private static String getRegionFileName(final int chunkX, final int chunkZ) {
-+    // LinearPaper start - Linear region format
-+    private static String getRegionFileName(final RegionStorageInfo info, final int chunkX, final int chunkZ) {
-+        if (info.regionFormat().equals(com.triassic.linearpaper.region.RegionFileFormat.LINEAR))
-+            return "r." + (chunkX >> REGION_SHIFT) + "." + (chunkZ >> REGION_SHIFT) + ".linear";
-         return "r." + (chunkX >> REGION_SHIFT) + "." + (chunkZ >> REGION_SHIFT) + ".mca";
-     }
- 
-@@ -87,7 +90,7 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
+@@ -87,7 +87,7 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
              this.regionCache.removeLast().close();
          }
  
@@ -448,7 +436,7 @@ index f533d13efe1458aa421b51abb6f8604ba71c48c8..8090df00723d54d36033f8f245f87c7c
  
          if (!java.nio.file.Files.exists(regionPath)) {
              this.markNonExisting(key);
-@@ -160,7 +163,7 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
+@@ -226,7 +226,7 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
                  this.regionCache.removeLast().close();
              }
  
