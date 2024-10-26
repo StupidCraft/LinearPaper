@@ -158,7 +158,7 @@ index e9e1ab1a5be996bc648a53dc4d4123a6b966c437..0226dfda6bdcd80c8f52ad820e1881be
          try (DataInputStream out = new DataInputStream(new java.io.BufferedInputStream(new InflaterInputStream(Files.newInputStream(file))))) {
              return NbtIo.read((java.io.DataInput) out);
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
-index 2d5c1b91b814316bf9f2f22bcd30adacc8970b01..a01cd8a146691033f92878ff9a7dd33378cc07cf 100644
+index 2d5c1b91b814316bf9f2f22bcd30adacc8970b01..13ab5612f077f111c1154e40f802d003693adc93 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
 @@ -21,7 +21,7 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
@@ -236,7 +236,7 @@ index 2d5c1b91b814316bf9f2f22bcd30adacc8970b01..a01cd8a146691033f92878ff9a7dd333
      // Paper end - rewrite chunk system
  
 -    public RegionFile getRegionFile(ChunkPos chunkcoordintpair, boolean existingOnly) throws IOException { // CraftBukkit // Paper - public
-+    public com.triassic.linearpaper.region.AbstractRegionFile getRegionFile(ChunkPos chunkcoordintpair, boolean existingOnly) throws IOException { // CraftBukkit // Paper - public
++    public com.triassic.linearpaper.region.AbstractRegionFile getRegionFile(ChunkPos chunkcoordintpair, boolean existingOnly) throws IOException { // CraftBukkit // Paper - public // LinearPaper
          // Paper start - rewrite chunk system
          if (existingOnly) {
              return this.moonrise$getRegionFileIfExists(chunkcoordintpair.x, chunkcoordintpair.z);
