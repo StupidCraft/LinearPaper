@@ -5,7 +5,7 @@ Subject: [PATCH] Add Linear region format
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 2bb6508b73755693c812c5d6572ce5dc0cea8592..cfc6a7bc0633bebf0570c1cfacdeaa073372258f 100644
+index a4856371131963dac24aed746786d02a7a919b16..5fabf1eeec664874ddfa50b3fba27c6788fb3790 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -30,6 +30,10 @@ dependencies {
@@ -424,7 +424,7 @@ index 9701e6b69b99b3ec392810f4a7000adb97f1132c..4be8c6d5b066540bbc735fa2dc476b65
  
              if (afile == null) {
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
-index dd39ab538a2b1b5998bbfb830df26316b2a718c8..634bfab92ae2e65d60ef6381d7c4eb507215fdd4 100644
+index 6f83fe8ab56049d771507f76ae8951af1ef175a9..bc2177540e5b1bd881dd90ee7cc51ce882d7b446 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
 @@ -87,7 +87,7 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
@@ -436,7 +436,7 @@ index dd39ab538a2b1b5998bbfb830df26316b2a718c8..634bfab92ae2e65d60ef6381d7c4eb50
  
          if (!java.nio.file.Files.exists(regionPath)) {
              this.markNonExisting(key);
-@@ -226,7 +226,7 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
+@@ -257,7 +257,7 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
                  this.regionCache.removeLast().close();
              }
  

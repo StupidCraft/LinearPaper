@@ -302,8 +302,20 @@ index 0000000000000000000000000000000000000000..562200dd06f5c30219746be01441a7de
 +        return value.isEmpty() ? fallback : value;
 +    }
 +}
+diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+index 17a158ff6ce6520b69a5a0032ba4c05449dd0cf8..f604ff221ca1c9115fe2880520339655cd74cf15 100644
+--- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
++++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+@@ -224,6 +224,7 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+         this.paperConfigurations.initializeWorldDefaultsConfiguration(this.registryAccess());
+         // Paper end - initialize global and world-defaults configuration
+         this.server.spark.enableEarlyIfRequested(); // Paper - spark
++        com.triassic.linearpaper.LinearConfig.init((java.io.File) this.options.valueOf("linear-settings")); // LinearPaper
+         // Paper start - fix converting txt to json file; convert old users earlier after PlayerList creation but before file load/save
+         if (this.convertOldUsers()) {
+             this.getProfileCache().save(false); // Paper
 diff --git a/src/main/java/net/minecraft/world/level/Level.java b/src/main/java/net/minecraft/world/level/Level.java
-index 044985030607bc20a61666dee7dd2659ae4553b5..7c1490fe1a923edeac927bffa7984b434bfbfc28 100644
+index 022de445bbbb869c38be4972c98dcf1c665539ec..50fd1804ca1291d7bedb42dc8d64b4bef8531d1c 100644
 --- a/src/main/java/net/minecraft/world/level/Level.java
 +++ b/src/main/java/net/minecraft/world/level/Level.java
 @@ -172,6 +172,7 @@ public abstract class Level implements LevelAccessor, AutoCloseable, ca.spottedl
@@ -313,12 +325,20 @@ index 044985030607bc20a61666dee7dd2659ae4553b5..7c1490fe1a923edeac927bffa7984b43
 +    public final com.triassic.linearpaper.LinearWorldConfig linearConfig; // LinearPaper
  
      public final com.destroystokyo.paper.antixray.ChunkPacketBlockController chunkPacketBlockController; // Paper - Anti-Xray
-     public final co.aikar.timings.WorldTimingsHandler timings; // Paper
+     public static BlockPos lastPhysicsProblem; // Spigot
+@@ -842,6 +843,7 @@ public abstract class Level implements LevelAccessor, AutoCloseable, ca.spottedl
+         // Paper end - getblock optimisations - cache world height/sections
+         this.spigotConfig = new org.spigotmc.SpigotWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) worlddatamutable).getLevelName()); // Spigot
+         this.paperConfig = paperWorldConfigCreator.apply(this.spigotConfig); // Paper - create paper world config
++        this.linearConfig = new com.triassic.linearpaper.LinearWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) worlddatamutable).getLevelName()); // LinearPaper
+         this.generator = gen;
+         this.world = new CraftWorld((ServerLevel) this, gen, biomeProvider, env);
+ 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index a34e40e273a79a234c3d79b6ad360ce3a4d35ba3..936ad535131f17c0d4729ff1095f20b29d564360 100644
+index 9f9eefc7346838a9effcda861cecd098092efb0f..4750ea4373e5dbf3a05854b3677d116911ee9ea3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -1088,6 +1088,7 @@ public final class CraftServer implements Server {
+@@ -1089,6 +1089,7 @@ public final class CraftServer implements Server {
                  }
              }
              world.spigotConfig.init(); // Spigot
@@ -326,7 +346,7 @@ index a34e40e273a79a234c3d79b6ad360ce3a4d35ba3..936ad535131f17c0d4729ff1095f20b2
          }
  
          Plugin[] pluginClone = pluginManager.getPlugins().clone(); // Paper
-@@ -2968,6 +2969,12 @@ public final class CraftServer implements Server {
+@@ -3009,6 +3010,12 @@ public final class CraftServer implements Server {
              return CraftServer.this.console.paperConfigurations.createLegacyObject(CraftServer.this.console);
          }
  
