@@ -4,10 +4,10 @@ Date: Fri, 22 Sep 2023 23:27:14 +0300
 Subject: [PATCH] Region format configuration
 
 
-diff --git a/src/main/java/com/triassic/linearpaper/LinearConfig.java b/src/main/java/com/triassic/linearpaper/LinearConfig.java
+diff --git a/src/main/java/dev/triassic/linearpaper/LinearConfig.java b/src/main/java/dev/triassic/linearpaper/LinearConfig.java
 index ad7400a1d200ff93c75d44d4c5b06cc4172d305b..96fae6a58b2f27fd344913b0a6c3456768dcb064 100644
---- a/src/main/java/com/triassic/linearpaper/LinearConfig.java
-+++ b/src/main/java/com/triassic/linearpaper/LinearConfig.java
+--- a/src/main/java/dev/triassic/linearpaper/LinearConfig.java
++++ b/src/main/java/dev/triassic/linearpaper/LinearConfig.java
 @@ -170,4 +170,17 @@ public class LinearConfig {
          }
          return builder.build();
@@ -26,20 +26,20 @@ index ad7400a1d200ff93c75d44d4c5b06cc4172d305b..96fae6a58b2f27fd344913b0a6c34567
 +            linearFlushThreads = Math.max(linearFlushThreads, 1);
 +    }
  }
-diff --git a/src/main/java/com/triassic/linearpaper/LinearWorldConfig.java b/src/main/java/com/triassic/linearpaper/LinearWorldConfig.java
+diff --git a/src/main/java/dev/triassic/linearpaper/LinearWorldConfig.java b/src/main/java/dev/triassic/linearpaper/LinearWorldConfig.java
 index 562200dd06f5c30219746be01441a7de69c8757d..20091964e6dddd3b15a6134a2afbbe928d72b849 100644
---- a/src/main/java/com/triassic/linearpaper/LinearWorldConfig.java
-+++ b/src/main/java/com/triassic/linearpaper/LinearWorldConfig.java
-@@ -3,8 +3,10 @@ package com.triassic.linearpaper;
+--- a/src/main/java/dev/triassic/linearpaper/LinearWorldConfig.java
++++ b/src/main/java/dev/triassic/linearpaper/LinearWorldConfig.java
+@@ -3,8 +3,10 @@ package dev.triassic.linearpaper;
  import java.util.List;
  import java.util.Map;
  import java.util.function.Predicate;
 +import java.util.logging.Level;
  import org.apache.commons.lang.BooleanUtils;
  import org.bukkit.configuration.ConfigurationSection;
-+import com.triassic.linearpaper.region.RegionFileFormat;
++import dev.triassic.linearpaper.region.RegionFileFormat;
  
- import static com.triassic.linearpaper.LinearConfig.log;
+ import static dev.triassic.linearpaper.LinearConfig.log;
  
 @@ -110,4 +112,23 @@ public class LinearWorldConfig {
          final Map<String, Object> value = getMap("world-settings." + worldName + "." + path, null);
@@ -65,13 +65,13 @@ index 562200dd06f5c30219746be01441a7de69c8757d..20091964e6dddd3b15a6134a2afbbe92
 +        }
 +    }
  }
-diff --git a/src/main/java/com/triassic/linearpaper/region/RegionFileFormat.java b/src/main/java/com/triassic/linearpaper/region/RegionFileFormat.java
+diff --git a/src/main/java/dev/triassic/linearpaper/region/RegionFileFormat.java b/src/main/java/dev/triassic/linearpaper/region/RegionFileFormat.java
 new file mode 100644
 index 0000000000000000000000000000000000000000..1285e3c410c9f6b5ed8c3ac11da60d1e1be4fe34
 --- /dev/null
-+++ b/src/main/java/com/triassic/linearpaper/region/RegionFileFormat.java
++++ b/src/main/java/dev/triassic/linearpaper/region/RegionFileFormat.java
 @@ -0,0 +1,16 @@
-+package com.triassic.linearpaper.region;
++package dev.triassic.linearpaper.region;
 +
 +public enum RegionFileFormat {
 +    ANVIL,

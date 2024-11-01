@@ -19,10 +19,10 @@ index 51b933a204491c57dcecab58d4d2807f10ec33dc..42347c4b732784493993479b2c3d3655
      implementation("org.apache.logging.log4j:log4j-iostreams:2.22.1") // Paper - remove exclusion
      implementation("org.ow2.asm:asm-commons:9.7.1")
      implementation("org.spongepowered:configurate-yaml:4.2.0-SNAPSHOT") // Paper - config files
-diff --git a/src/main/java/com/triassic/linearpaper/region/AbstractRegionFileFactory.java b/src/main/java/com/triassic/linearpaper/region/AbstractRegionFileFactory.java
+diff --git a/src/main/java/dev/triassic/linearpaper/region/AbstractRegionFileFactory.java b/src/main/java/dev/triassic/linearpaper/region/AbstractRegionFileFactory.java
 index c010b45b2aefeb1394a27b11b787ff58eecc432d..f32226dd652f6129b4d0d2b262da3555e9be34a9 100644
---- a/src/main/java/com/triassic/linearpaper/region/AbstractRegionFileFactory.java
-+++ b/src/main/java/com/triassic/linearpaper/region/AbstractRegionFileFactory.java
+--- a/src/main/java/dev/triassic/linearpaper/region/AbstractRegionFileFactory.java
++++ b/src/main/java/dev/triassic/linearpaper/region/AbstractRegionFileFactory.java
 @@ -13,6 +13,10 @@ public class AbstractRegionFileFactory {
      }
  
@@ -35,13 +35,13 @@ index c010b45b2aefeb1394a27b11b787ff58eecc432d..f32226dd652f6129b4d0d2b262da3555
 +        }
      }
  }
-diff --git a/src/main/java/com/triassic/linearpaper/region/LinearRegionFile.java b/src/main/java/com/triassic/linearpaper/region/LinearRegionFile.java
+diff --git a/src/main/java/dev/triassic/linearpaper/region/LinearRegionFile.java b/src/main/java/dev/triassic/linearpaper/region/LinearRegionFile.java
 new file mode 100644
 index 0000000000000000000000000000000000000000..516f6c684058e542d01eeabde7e0a43e150478d8
 --- /dev/null
-+++ b/src/main/java/com/triassic/linearpaper/region/LinearRegionFile.java
++++ b/src/main/java/dev/triassic/linearpaper/region/LinearRegionFile.java
 @@ -0,0 +1,304 @@
-+package com.triassic.linearpaper.region;
++package dev.triassic.linearpaper.region;
 +
 +import com.github.luben.zstd.ZstdInputStream;
 +import com.github.luben.zstd.ZstdOutputStream;
@@ -345,13 +345,13 @@ index 0000000000000000000000000000000000000000..516f6c684058e542d01eeabde7e0a43e
 +        }
 +    }
 +}
-diff --git a/src/main/java/com/triassic/linearpaper/region/LinearRegionFileFlusher.java b/src/main/java/com/triassic/linearpaper/region/LinearRegionFileFlusher.java
+diff --git a/src/main/java/dev/triassic/linearpaper/region/LinearRegionFileFlusher.java b/src/main/java/dev/triassic/linearpaper/region/LinearRegionFileFlusher.java
 new file mode 100644
 index 0000000000000000000000000000000000000000..f7c5b51f5ab7c3ca5cd31e62bbc599ab600baad0
 --- /dev/null
-+++ b/src/main/java/com/triassic/linearpaper/region/LinearRegionFileFlusher.java
++++ b/src/main/java/dev/triassic/linearpaper/region/LinearRegionFileFlusher.java
 @@ -0,0 +1,50 @@
-+package com.triassic.linearpaper.region;
++package dev.triassic.linearpaper.region;
 +
 +import com.google.common.util.concurrent.ThreadFactoryBuilder;
 +import java.util.Queue;
@@ -361,7 +361,7 @@ index 0000000000000000000000000000000000000000..f7c5b51f5ab7c3ca5cd31e62bbc599ab
 +import java.util.concurrent.ScheduledExecutorService;
 +import java.util.concurrent.TimeUnit;
 +import org.bukkit.Bukkit;
-+import com.triassic.linearpaper.LinearConfig;
++import dev.triassic.linearpaper.LinearConfig;
 +
 +public class LinearRegionFileFlusher {
 +
@@ -434,7 +434,7 @@ index f533d13efe1458aa421b51abb6f8604ba71c48c8..8090df00723d54d36033f8f245f87c7c
 -    private static String getRegionFileName(final int chunkX, final int chunkZ) {
 +    // LinearPaper start - Linear region format
 +    private static String getRegionFileName(final RegionStorageInfo info, final int chunkX, final int chunkZ) {
-+        if (info.regionFormat().equals(com.triassic.linearpaper.region.RegionFileFormat.LINEAR))
++        if (info.regionFormat().equals(dev.triassic.linearpaper.region.RegionFileFormat.LINEAR))
 +            return "r." + (chunkX >> REGION_SHIFT) + "." + (chunkZ >> REGION_SHIFT) + ".linear";
          return "r." + (chunkX >> REGION_SHIFT) + "." + (chunkZ >> REGION_SHIFT) + ".mca";
      }
@@ -467,7 +467,7 @@ index 6111631c6673948b266286894603cc5e30451b02..f8b4b3bebc684bf012b37505afd28c2a
      }
 +
 +    // LinearPaper start
-+    public com.triassic.linearpaper.region.RegionFileFormat regionFormat() {
++    public dev.triassic.linearpaper.region.RegionFileFormat regionFormat() {
 +        return ((org.bukkit.craftbukkit.CraftWorld) org.bukkit.Bukkit.getWorld(level))
 +            .getHandle()
 +            .linearConfig

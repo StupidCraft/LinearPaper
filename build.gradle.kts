@@ -86,7 +86,7 @@ paperweight {
 }
 
 tasks.generateDevelopmentBundle {
-    apiCoordinates = "com.triassic.linearpaper:linearpaper-api"
+    apiCoordinates = "dev.triassic.linearpaper:linearpaper-api"
     libraryRepositories = listOf(
         "https://repo.maven.apache.org/maven2/",
         paperMavenPublicUrl,

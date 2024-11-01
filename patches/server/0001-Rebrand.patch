@@ -68,7 +68,7 @@ index 774556a62eb240da42e84db4502e2ed43495be17..422f728484d74ca78eacabfefc0b6bfc
          String result = "Unknown-Version";
  
 -        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/io.papermc.paper/paper-api/pom.properties");
-+        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/com.triassic.linearpaper/linearpaper-api/pom.properties"); // LinearPaper
++        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/dev.triassic.linearpaper/linearpaper-api/pom.properties"); // LinearPaper
          Properties properties = new Properties();
  
          if (stream != null) {
